@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        Button startbutton = findViewById(R.id.btnStart);
-        startbutton.setOnClickListener(v -> {
+        Button startButton = findViewById(R.id.btnStart);
+        startButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, GameActivity.class);
             startActivity(intent);
         });
