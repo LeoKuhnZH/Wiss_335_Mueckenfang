@@ -2,6 +2,7 @@ package com.example.mckenfang;
 
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -28,5 +29,29 @@ public class GameActivity extends AppCompatActivity {
         });
         txtPoints = findViewById(R.id.txtPoints);
         gameArea = findViewById(R.id.gameArea);
+
+        txtPoints.setText("0");
+        gameArea.post(this::createMosquito);
+    }
+
+    void createMosquito() {
+        ImageView mosquito = new ImageView(this);
+        mosquito.setImageResource(R.drawable.mosquito);
+
+        int size = 200;
+        gameArea.addView(mosquito, size, size);
+
+        float maxX = gameArea.getWidth() - size;
+        float maxY = gameArea.getHeight() - size;
+
+        mosquito.setX((float) (Math.random() * maxX));
+        mosquito.setY((float) (Math.random() * maxY));
+
+        mosquito.setClickable(true);
+        mosquito.setOnClickListener(v -> {
+            gameArea.removeView(v);
+            createMosquito();
+            txtPoints.setText(String.valueOf(Integer.parseInt(txtPoints.getText().toString()) + 1));
+        });
     }
 }
