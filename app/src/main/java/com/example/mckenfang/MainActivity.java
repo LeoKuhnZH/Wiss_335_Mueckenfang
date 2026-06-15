@@ -12,6 +12,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
+    Button startButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        Button startButton = findViewById(R.id.btnStart);
+        startButton = findViewById(R.id.btnStart);
         startButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, GameActivity.class);
             startActivity(intent);
