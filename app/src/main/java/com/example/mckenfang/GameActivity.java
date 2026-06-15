@@ -38,6 +38,8 @@ public class GameActivity extends AppCompatActivity {
         ImageView mosquito = new ImageView(this);
         mosquito.setImageResource(R.drawable.mosquito);
 
+        mosquito.setLongClickable(false);
+
         int size = 200;
         gameArea.addView(mosquito, size, size);
 
