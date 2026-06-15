@@ -15,6 +15,7 @@ public class GameActivity extends AppCompatActivity {
 
     TextView txtPoints;
     FrameLayout gameArea;
+    private final Runnable createMosquitoRunnable = this::createMosquito;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,15 @@ public class GameActivity extends AppCompatActivity {
         gameArea = findViewById(R.id.gameArea);
 
         txtPoints.setText("0");
-        gameArea.post(this::createMosquito);
+        gameArea.post(createMosquitoRunnable);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (gameArea != null) {
+            gameArea.removeCallbacks(createMosquitoRunnable);
+        }
     }
 
     void createMosquito() {
@@ -53,7 +62,8 @@ public class GameActivity extends AppCompatActivity {
         mosquito.setOnClickListener(v -> {
             gameArea.removeView(v);
             createMosquito();
-            txtPoints.setText(String.valueOf(Integer.parseInt(txtPoints.getText().toString()) + 1));
+            int points = Integer.parseInt(txtPoints.getText().toString()) + 1;
+            txtPoints.setText(String.valueOf(points));
         });
     }
 }
