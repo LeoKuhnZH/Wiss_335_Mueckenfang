@@ -8,7 +8,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,11 +17,19 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int GAME_REQUEST_CODE = 1;
     Button startButton;
     TextView txtScoreShow;
     TextView txtHighscore;
     SharedPreferences sharedPreferences;
+
+    private final ActivityResultLauncher<Intent> gameActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    int lastScore = result.getData().getIntExtra("Score", 0);
+                    txtScoreShow.setText("Last Score: " + lastScore);
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         startButton.setOnClickListener(v -> {
             Intent gameIntent = new Intent(this, GameActivity.class);
-            startActivityForResult(gameIntent, GAME_REQUEST_CODE);
+            gameActivityResultLauncher.launch(gameIntent);
         });
     }
 
@@ -52,15 +61,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateDisplay();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GAME_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            int lastScore = data.getIntExtra("Score", 0);
-            txtScoreShow.setText("Last Score: " + lastScore);
-        }
     }
 
     private void updateDisplay() {
